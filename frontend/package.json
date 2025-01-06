@@ -1,0 +1,11 @@
+{
+  "name": "zimconnect-frontend",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 3001"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
