@@ -43,7 +43,7 @@ write_lines_with_commit() {
 git init
 
 log_message "Setting up project directories..."
-mkdir -p frontend, tests
+mkdir -p frontend tests
 commit_message="Initialized project directories"
 git_commit_push "$commit_message"
 sleep 300
