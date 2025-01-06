@@ -43,7 +43,7 @@ write_lines_with_commit() {
 git init
 
 log_message "Setting up project directories..."
-mkdir -p zimconnect/{frontend,backend,tests}
+mkdir -p frontend,tests
 commit_message="Initialized project directories"
 git_commit_push "$commit_message"
 sleep 300
@@ -62,7 +62,7 @@ git_commit_push "$commit_message"
 sleep 360
 
 log_message "Creating frontend files incrementally..."
-write_lines_with_commit "zimconnect/frontend/index.html" "Frontend HTML" 420 "<!DOCTYPE html>
+write_lines_with_commit "frontend/index.html" "Frontend HTML" 420 "<!DOCTYPE html>
 <html lang=\"en\">
 <head>
     <meta charset=\"UTF-8\">
