@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Script to automate the creation of ZimConnect files incrementally with Git commits
-
 # Function to log messages with timestamps
 log_message() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -14,40 +12,16 @@ git_commit_push() {
     git push
 }
 
-# Function to write lines incrementally to a file
-write_lines_with_commit() {
-    local file_path=$1
-    shift
-    local commit_message_prefix=$1
-    shift
-    local delay=$1
-    shift
-    local lines=($(echo "$@" | tr '\n' '\0'))
-    local count=0
-    local increment=1
+# Main script starts here
+log_message "Initializing Git repository..."
 
-    for line in "${lines[@]}"; do
-        echo -e "$line" >> "$file_path"
-        count=$((count + increment))
-
-        if (( count % 3 == 0 )); then
-            commit_message="$commit_message_prefix: Added lines $(($count - 2))-$count"
-            git_commit_push "$commit_message"
-            sleep $delay
-            increment=$((increment + 1))
-        fi
-    done
-}
-
-# Main execution
-git init
-
+# Step 1: Create project structure
 log_message "Setting up project directories..."
 mkdir -p frontend tests
-commit_message="Initialized project directories"
-git_commit_push "$commit_message"
-sleep 300
+echo -e "# ZimConnect\nA platform for e-commerce solutions between South Africa and Zimbabwe." > README.md
+git_commit_push "Initialized ZimConnect project structure and README"
 
+# Step 2: Create .env file
 log_message "Creating .env file..."
 cat <<EOT > .env
 PORT=3000
@@ -57,21 +31,68 @@ DB_USER=zimconnect
 DB_PASSWORD=Jmutewera27
 DB_NAME=zimconnect_db
 EOT
-commit_message="Added environment configuration file"
-git_commit_push "$commit_message"
-sleep 360
+git_commit_push "Added .env file with project configuration"
 
-log_message "Creating frontend files incrementally..."
-write_lines_with_commit "frontend/index.html" "Frontend HTML" 420 "<!DOCTYPE html>
-<html lang=\"en\">
+# Step 3: Set up backend server
+log_message "Setting up backend server files..."
+cat <<EOT > backend/server.js
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use('/api', (req, res) => {
+    res.json({ message: 'Welcome to the ZimConnect API!' });
+});
+
+app.listen(PORT, () => {
+    console.log(\`Backend server running on port \${PORT}\`);
+});
+EOT
+
+cat <<EOT > backend/package.json
+{
+  "name": "zimconnect-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+EOT
+
+cd backend && npm install && cd ../..
+git_commit_push "Set up backend server with Express"
+
+# Step 4: Set up frontend server
+log_message "Setting up frontend files..."
+cat <<EOT > frontend/index.html
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>ZimConnect E-commerce Platform</title>
-    <link rel=\"stylesheet\" href=\"css/styles.css\">
-    <script src=\"js/scripts.js\" defer></script>"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZimConnect Frontend</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/scripts.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Welcome to ZimConnect</h1>
+    </header>
+    <main>
+        <p>Connecting South Africa and Zimbabwe with seamless e-commerce.</p>
+    </main>
+</body>
+</html>
+EOT
 
-write_lines_with_commit "frontend/css/styles.css" "Frontend CSS" 300 "body {
+mkdir -p frontend/css zimconnect/frontend/js
+cat <<EOT > frontend/css/styles.css
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -82,8 +103,33 @@ header {
     background-color: #00843D;
     color: white;
     padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}"
+    text-align: center;
+}
+EOT
+
+cat <<EOT > frontend/js/scripts.js
+console.log("ZimConnect Frontend Loaded");
+EOT
+
+# Configure frontend server (Optional: for development, Next.js or static file hosting)
+cat <<EOT > frontend/package.json
+{
+  "name": "zimconnect-frontend",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 3001"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
+EOT
+
+cd frontend && npm install http-server && cd ../..
+git_commit_push "Set up frontend files and server configuration"
+
+# Summary message
+log_message "Project setup complete. Backend is on port 3000, frontend is on port 3001."
+log_message "You can run the backend using 'node zimconnect/backend/server.js' and the frontend using 'npm run start' in zimconnect/frontend."
 
