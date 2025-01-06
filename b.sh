@@ -71,7 +71,7 @@ write_lines_with_commit "frontend/index.html" "Frontend HTML" 420 "<!DOCTYPE htm
     <link rel=\"stylesheet\" href=\"css/styles.css\">
     <script src=\"js/scripts.js\" defer></script>"
 
-write_lines_with_commit "zimconnect/frontend/css/styles.css" "Frontend CSS" 300 "body {
+write_lines_with_commit "frontend/css/styles.css" "Frontend CSS" 300 "body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
