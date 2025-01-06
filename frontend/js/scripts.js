@@ -22,4 +22,8 @@ git_commit_push "Set up frontend files and server configuration"
 # Summary message
 log_message "Project setup complete. Backend is on port 3000, frontend is on port 3001."
 log_message "You can run the backend using 'node zimconnect/backend/server.js' and the frontend using 'npm run start' in zimconnect/frontend."
-
+ <script src="js/scripts.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/currency.js" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" defer></script>
