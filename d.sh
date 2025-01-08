@@ -7,7 +7,8 @@
 payment_files=("payment.html" "js/payment.js" "css/payment.css" "api/payment_api.py")
 
 # Create payment.html for frontend UI
-cat << 'EOF' > payment.html
+mkdir -p html
+cat << 'EOF' > html/payment.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -141,6 +142,15 @@ while [ $line_count -lt 10 ]; do
   git push
   sleep $((RANDOM % 5 + interval))m
   line_count=$((line_count + 2))
+done
+
+# Updated loop for individual commits with delay between each commit
+for file in "${payment_files[@]}"; do
+  git add "$file"
+  git commit -m "Added or updated $file."
+  git push
+  sleep $((RANDOM % 5 + 5))m
+  echo "Committed $file and pushed to GitHub."
 done
 
 echo "ZimConnect Payment script execution completed."
