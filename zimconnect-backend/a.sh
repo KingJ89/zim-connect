@@ -1,171 +1,110 @@
 #!/bin/bash
 
-# ZimConnect Payment Script
-# This script adds dynamic payment functionality to the ZimConnect web application, including PayPal, Afterpay, and MasterCard/Visa integrations.
+# Function to create a basic frontend for the Express.js backend
+echo "Setting up frontend files..."
+mkdir -p public/{css,js,images} views
 
-# Declare file paths and initial content
-payment_files=("payment.html" "js/payment.js" "css/payment.css" "api/payment_api.py")
-
-# Create payment.html for frontend UI
-mkdir -p html
-cat << 'EOF' > html/payment.html
+# HTML for main page (views/index.ejs)
+cat <<EOL > views/index.ejs
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZimConnect Payment</title>
-  <link rel="stylesheet" href="css/payment.css">
-  <script src="js/payment.js" defer></script>
+  <title>ZimConnect E-commerce</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/scripts.js" defer></script>
 </head>
 <body>
   <header>
-    <h1>Checkout</h1>
+    <h1>Welcome to ZimConnect</h1>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/cart">Cart</a></li>
+        <li><a href="/login">Login</a></li>
+      </ul>
+    </nav>
   </header>
   <main>
-    <div id="payment-options">
-      <h2>Select Payment Method</h2>
-      <button onclick="payWithPayPal()">PayPal</button>
-      <button onclick="payWithAfterpay()">Afterpay</button>
-      <button onclick="payWithCard()">MasterCard/Visa</button>
-    </div>
+    <h2>Our Products</h2>
+    <div id="product-list"></div>
   </main>
   <footer>
     <p>&copy; 2025 ZimConnect. All rights reserved.</p>
   </footer>
 </body>
 </html>
-EOF
+EOL
 
-# Create js/payment.js for handling payment logic
-mkdir -p js
-cat << 'EOF' > js/payment.js
-function payWithPayPal() {
-  alert("Redirecting to PayPal...");
-  window.location.href = "/api/payment/paypal";
-}
-
-function payWithAfterpay() {
-  alert("Redirecting to Afterpay...");
-  window.location.href = "/api/payment/afterpay";
-}
-
-function payWithCard() {
-  alert("Redirecting to Card Payment...");
-  window.location.href = "/api/payment/card";
-}
-EOF
-
-# Create css/payment.css for styling
-mkdir -p css
-cat << 'EOF' > css/payment.css
+# CSS file (public/css/styles.css)
+cat <<EOL > public/css/styles.css
 body {
   font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
-
 header {
-  background-color: #333;
+  background-color: #009e60;
   color: white;
-  width: 100%;
+  padding: 10px;
   text-align: center;
-  padding: 1em 0;
 }
-
-main {
-  margin: 20px;
+nav ul {
+  list-style-type: none;
+  padding: 0;
 }
-
-button {
-  margin: 10px;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
+nav ul li {
+  display: inline;
+  margin: 0 15px;
 }
-EOF
+EOL
 
-# Create api/payment_api.py for backend API endpoints
-mkdir -p api
-cat << 'EOF' > api/payment_api.py
-from flask import Flask, jsonify, request, redirect
+# JavaScript file (public/js/scripts.js)
+cat <<EOL > public/js/scripts.js
+window.addEventListener('DOMContentLoaded', () => {
+  console.log('ZimConnect frontend is up and running');
+});
+EOL
 
-app = Flask(__name__)
+# Express.js route setup (routes/frontend.js)
+cat <<EOL > routes/frontend.js
+const express = require('express');
+const router = express.Router();
 
-@app.route('/api/payment/paypal', methods=['GET'])
-def paypal_payment():
-    return redirect("https://www.paypal.com/checkoutnow")
+router.get('/', (req, res) => {
+  res.render('index');
+});
 
-@app.route('/api/payment/afterpay', methods=['GET'])
-def afterpay_payment():
-    return jsonify({"message": "Afterpay integration coming soon."})
+module.exports = router;
+EOL
 
-@app.route('/api/payment/card', methods=['GET'])
-def card_payment():
-    return jsonify({"message": "Enter card details to proceed."})
-
-if __name__ == '__main__':
-    app.run(port=3000, debug=True)
-EOF
-
-# Create AUTHORS file
-cat << 'EOF' > AUTHORS
-# ZimConnect Project Contributors
-Jan Yaya Mutewera <janmutewera@gmail.com>
-EOF
-
-# Function to check front-end and back-end connectivity
-function check_connectivity() {
-  echo "Checking front-end and back-end connectivity..."
-  frontend_url="http://localhost:3001/payment.html"
-  backend_url="http://localhost:3000/api/payment/paypal"
-
-  if curl --output /dev/null --silent --head --fail "$frontend_url" && \
-     curl --output /dev/null --silent --head --fail "$backend_url"; then
-    echo "Front-end and back-end are connected."
-  else
-    echo "Connection issue detected. Restarting services..."
-    # Assuming the front-end is served with a different service
-    systemctl restart frontend-service
-    systemctl restart backend-service
-  fi
-}
-
-# Check connectivity
-check_connectivity
-
-# Add, commit, and push changes incrementally to GitHub
-# This part commits two lines every 5 to 9 minutes in a loop
-line_count=0
-interval=5
-while [ $line_count -lt 10 ]; do
-  git add .
-  git commit -m "Added $((line_count + 2)) lines to payment module."
-  git push
-  sleep $((RANDOM % 5 + interval))m
-  line_count=$((line_count + 2))
-done
-
-# Updated loop for individual commits with delay between each commit
-for file in "${payment_files[@]}"; do
-  git add "$file"
-  git commit -m "Added or updated $file."
-  git push
-  sleep $((RANDOM % 5 + 5))m
-  echo "Committed $file and pushed to GitHub."
-done
-
-# Final commit for AUTHORS file
-if [ -f AUTHORS ]; then
-  git add AUTHORS
-  git commit -m "Added AUTHORS file for project contributors."
-  git push
-  echo "AUTHORS file committed and pushed."
+# Add route in server.js
+if ! grep -q "frontend" server.js; then
+  sed -i "/const app/a const frontendRoutes = require('./routes/frontend');" server.js
+  sed -i "/app.use/a app.use('/', frontendRoutes);" server.js
 fi
 
-echo "ZimConnect Payment script execution completed."
+# Install dependencies and start the server
+echo "Installing dependencies..."
+npm install express ejs
+
+echo "Starting the server..."
+npm start &
+
+# Git automation with incremental commits
+echo "Automating git commits..."
+FILES=("views/index.ejs" "public/css/styles.css" "public/js/scripts.js" "routes/frontend.js" "server.js")
+INTERVALS=(7 8 9 10)
+
+for i in "${!FILES[@]}"; do
+  git add "${FILES[$i]}"
+  git commit -m "Added ${FILES[$i]}"
+  git push
+  sleep ${INTERVALS[$((i % ${#INTERVALS[@]}))]}m
+done
+
+echo "Setup and deployment complete."
 
