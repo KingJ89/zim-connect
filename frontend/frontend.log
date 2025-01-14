@@ -21,3 +21,11 @@ Available on:
   http://192.168.0.49:3001
 Hit CTRL-C to stop the server
 
+[2025-01-14T19:12:44.305Z]  "GET /login" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
+(node:647056) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[2025-01-14T19:12:44.710Z]  "GET /css/styles.css" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
+[2025-01-14T19:12:44.745Z]  "GET /js/auth.js" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
+[2025-01-14T19:13:20.456Z]  "GET /index.html" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
+[2025-01-14T19:13:20.751Z]  "GET /js/scripts.js" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
+[2025-01-14T19:13:40.755Z]  "GET /login.html" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
