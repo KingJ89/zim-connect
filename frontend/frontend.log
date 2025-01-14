@@ -29,3 +29,4 @@ Hit CTRL-C to stop the server
 [2025-01-14T19:13:20.456Z]  "GET /index.html" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
 [2025-01-14T19:13:20.751Z]  "GET /js/scripts.js" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
 [2025-01-14T19:13:40.755Z]  "GET /login.html" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0"
+http-server stopped.
