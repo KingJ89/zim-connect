@@ -1,170 +1,70 @@
 #!/bin/bash
 
-# Set environment variables
+# ZimConnect Full Dynamic Website Shell Script
+# This script ensures the front-end and back-end are connected, adds missing files and features,
+# runs unit and integration tests, and pushes changes incrementally to GitHub.
 
-export FRONTEND_PORT=3001
-export BACKEND_PORT=3000
+# Front-end and back-end ports
+FRONTEND_PORT=3001
+BACKEND_PORT=3000
 
-# Clone the repository if not already cloned
-if [ ! -d "$PROJECT_DIR" ]; then
-    echo "Cloning the ZimConnect e-commerce repository..."
-    git clone "$REPO_URL" "$PROJECT_DIR"
-else
-    echo "Repository already exists. Pulling latest changes..."
-    cd "$PROJECT_DIR"
-    git pull origin main
-fi
-
-# Navigate to the project directory
-cd "$PROJECT_DIR"
-
-# Create and implement today's features in the backend
-echo "Creating and implementing backend features..."
-mkdir -p backend
-cd backend
-
-cat <<EOF > server.js
-// Backend Server Code
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/zimconnect', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Failed to connect to MongoDB:', err));
-
-// User Schema
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
-
-// Hash passwords before saving
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
-
-const User = mongoose.model('User', userSchema);
-
-// Authentication Routes
-app.post('/register', async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-app.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '1h' });
-    res.json({ token });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// Start server
-app.listen(${BACKEND_PORT}, () => console.log('Backend running on port ${BACKEND_PORT}'));
-EOF
-
-npm install express mongoose bcrypt jsonwebtoken cors
-echo "Backend setup completed."
-
-# Push backend changes to GitHub
-git add server.js package.json package-lock.json
-git commit -m "Added backend server code with authentication"
-SLEEP_TIME=$((RANDOM % 5 + 5))
-echo "Pushing backend changes to GitHub after $SLEEP_TIME minutes..."
-sleep "${SLEEP_TIME}m"
-git push origin main
-
-# Create and implement today's features in the frontend
-echo "Creating and implementing frontend features..."
-cd ../
-mkdir -p frontend
-cd frontend
-
-cat <<EOF > index.html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZimConnect E-commerce</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <h1>Welcome to ZimConnect</h1>
-  <div id="app"></div>
-  <script src="app.js"></script>
-</body>
-</html>
-EOF
-
-cat <<EOF > styles.css
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f0f0;
+# Function to check connection between front-end and back-end
+check_connection() {
+  echo "Checking connection between front-end and back-end..."
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:$BACKEND_PORT/api/status)
+  if [ "$RESPONSE" -eq 200 ]; then
+    echo "Front-end and back-end are connected."
+  else
+    echo "Connection failed. Restarting services..."
+    restart_services
+  fi
 }
-h1 {
-  text-align: center;
-  margin-top: 20px;
+
+
+# Function to create missing files
+create_missing_files() {
+  echo "Creating missing files..."
+  declare -A files=(
+    ["frontend/payment.html"]='<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Payment - ZimConnect</title>\n  <link rel="stylesheet" href="css/styles.css">\n  <script src="js/payment.js" defer></script>\n</head>\n<body>\n  <header>\n    <div class="logo">ZimConnect</div>\n    <nav>\n      <ul>\n        <li><a href="index.html">Home</a></li>\n        <li><a href="shop.html">Shop</a></li>\n        <li><a href="login.html" id="login-btn">Login</a></li>\n        <li><a href="#logout" id="logout-btn" style="display:none;">Logout</a></li>\n      </ul>\n    </nav>\n  </header>\n  <main>\n    <h1>Payment Checkout</h1>\n    <form id="payment-form">\n      <label for="card-number">Card Number:</label><br>\n      <input type="text" id="card-number" name="card-number"><br><br>\n      <label for="expiry">Expiry Date:</label><br>\n      <input type="text" id="expiry" name="expiry"><br><br>\n      <label for="cvv">CVV:</label><br>\n      <input type="text" id="cvv" name="cvv"><br><br>\n      <button type="submit">Pay Now</button>\n    </form>\n  </main>\n  <footer>\n    <p>&copy; 2025 ZimConnect. All rights reserved.</p>\n  </footer>\n</body>\n</html>'
+
+    ["backend/routes/payment.js"]='const express = require("express");\nconst router = express.Router();\n\n// Payment route\nrouter.post("/payment", (req, res) => {\n  const { cardNumber, expiry, cvv } = req.body;\n  if (cardNumber && expiry && cvv) {\n    res.status(200).json({ message: "Payment processed successfully." });\n  } else {\n    res.status(400).json({ message: "Invalid payment details." });\n  }\n});\n\nmodule.exports = router;'
+  )
+
+  for file in "${!files[@]}"; do
+    if [ ! -f "$file" ]; then
+      echo -e "${files[$file]}" > "$file"
+      echo "Created $file"
+    else
+      echo "$file already exists."
+    fi
+  done
 }
-EOF
 
-cat <<EOF > app.js
-const app = document.getElementById('app');
+# Function to run unit and integration tests
+run_tests() {
+  echo "Running unit and integration tests..."
+  (cd frontend && npm test)
+  (cd backend && npm test)
+}
 
-// Example: Dynamic product loading
-fetch('http://localhost:${BACKEND_PORT}/products')
-  .then(response => response.json())
-  .then(products => {
-    app.innerHTML = products.map(product => `
-      <div class="product">
-        <h2>${product.name}</h2>
-        <p>${product.description}</p>
-        <p>Price: \$${product.price}</p>
-      </div>
-    `).join('');
-  })
-  .catch(err => console.error('Failed to load products:', err));
-EOF
+# Function to commit and push changes incrementally
+push_to_github() {
+  echo "Pushing changes to GitHub..."
+  git add .
+  git commit -m "Incremental commit: $(date)"
+  git push origin main
+}
 
-npm install
-echo "Frontend setup completed."
+# Main loop to push changes every 5 to 9 minutes
+main_loop() {
+  while true; do
+    create_missing_files
+    check_connection
+    run_tests
+    push_to_github
+    sleep $((RANDOM % 5 + 5))m
+  done
+}
 
-# Push frontend changes to GitHub
-git add index.html styles.css app.js package.json package-lock.json
-git commit -m "Added frontend with dynamic product loading"
-SLEEP_TIME=$((RANDOM % 5 + 5))
-echo "Pushing frontend changes to GitHub after $SLEEP_TIME minutes..."
-sleep "${SLEEP_TIME}m"
-git push origin main
-
-# Final cleanup and deployment
-echo "Finalizing and deploying the project..."
-cd "$PROJECT_DIR"
-npm run build
-echo "Deployment completed. Visit http://localhost:$FRONTEND_PORT to view your site."
-
+# Start the main loop
+main_loop
