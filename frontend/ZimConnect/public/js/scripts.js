@@ -1,26 +1,55 @@
-let cart = [];
+document.addEventListener('DOMContentLoaded', () => {
+    // Dark Mode Toggle
+    const toggleDarkMode = document.getElementById('toggle-darkmode');
+    toggleDarkMode.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
 
-function addToCart(product, price) {
-    cart.push({ product, price });
-    updateCartUI();
-}
+    // Currency Switcher
+    const currencySwitcher = document.getElementById('currency');
+    currencySwitcher.addEventListener('change', (event) => {
+        const selectedCurrency = event.target.value;
+        updatePrices(selectedCurrency);
+    });
 
-function updateCartUI() {
-    const cartItemsDiv = document.getElementById('cart-items');
-    cartItemsDiv.innerHTML = cart.map(item => `<p>${item.product}: R${item.price}</p>`).join('');
-}
+    // Cart Preview
+    const cartItems = [];
+    window.addToCart = (productName, price) => {
+        cartItems.push({ name: productName, price });
+        updateCartPreview();
+    };
 
-function checkout() {
-    if (cart.length === 0) {
-        alert('Cart is empty!');
-    } else {
-        alert('Checkout successful!');
-        cart = [];
-        updateCartUI();
-    }
-}
+    const updateCartPreview = () => {
+        const cartPreviewList = document.getElementById('cart-preview-list');
+        cartPreviewList.innerHTML = '';
+        cartItems.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${item.name} - R${item.price.toFixed(2)}`;
+            cartPreviewList.appendChild(li);
+        });
+    };
 
-// Toggle dark mode
-document.getElementById('toggle-darkmode').addEventListener('click', () => {
-    document.body.classList.toggle('darkmode');
+    // Update Prices Based on Currency
+    const updatePrices = (currency) => {
+        const products = document.querySelectorAll('.product-item');
+        products.forEach(product => {
+            const priceElement = product.querySelector('.price');
+            const basePrice = parseFloat(priceElement.textContent.replace('R', '').replace('$', ''));
+            if (currency === 'USD') {
+                priceElement.textContent = `$${(basePrice / 18).toFixed(2)}`;
+            } else {
+                priceElement.textContent = `R${basePrice.toFixed(2)}`;
+            }
+        });
+    };
+
+    // Checkout (Mockup)
+    window.checkout = () => {
+        if (cartItems.length === 0) {
+            alert('Your cart is empty!');
+        } else {
+            alert('Proceeding to checkout...');
+        }
+    };
 });
+

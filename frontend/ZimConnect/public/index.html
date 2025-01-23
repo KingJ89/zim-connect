@@ -13,26 +13,28 @@
         <div class="logo">ZimConnect</div>
         <nav>
             <ul>
-            <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="login.html" id="login-btn">Login</a></li>
-		<li><a href="product-tracker.html">Product Tracker</a></li>
-		<li><a href="additive-tracker.html">Additive Tracker</a></li>
-		<li><a href="google-maps.html">Find Us</a></li>
-
-                <li><a href="logout.html" id="logout-btn" style="display:none;">Logout</a></li></ul>
+                <li><a href="product-tracker.html">Product Tracker</a></li>
+                <li><a href="additive-tracker.html">Additive Tracker</a></li>
+                <li><a href="google-maps.html">Find Us</a></li>
+                <li><a href="logout.html" id="logout-btn" style="display:none;">Logout</a></li>
+            </ul>
         </nav>
-        <div class="theme-toggle">
-            <button id="toggle-darkmode">Dark Mode</button>
-        </div>
-        <div class="currency-switcher">
-            <label for="currency">Currency:</label>
-            <select id="currency">
-                <option value="ZAR" selected>ZAR</option>
-                <option value="USD">USD</option>
-            </select>
+        <div class="controls">
+            <div class="theme-toggle">
+                <button id="toggle-darkmode">Dark Mode</button>
+            </div>
+            <div class="currency-switcher">
+                <label for="currency">Currency:</label>
+                <select id="currency">
+                    <option value="ZAR" selected>ZAR</option>
+                    <option value="USD">USD</option>
+                </select>
+            </div>
         </div>
     </header>
 
@@ -40,6 +42,7 @@
         <section id="shop">
             <h1>Welcome to ZimConnect</h1>
             <div class="products">
+                <!-- Sample product items -->
                 <div class="product-item">
                     <img src="images/product1.jpg" alt="Product 1">
                     <h2>Product 1</h2>
@@ -57,13 +60,16 @@
 
         <section id="cart">
             <h2>Shopping Cart</h2>
-            <div id="cart-items"></div>
+            <div id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            <div id="cart-preview">
+                <h3>Cart Preview</h3>
+                <ul id="cart-preview-list">
+                    <!-- Preview items will be shown here -->
+                </ul>
+            </div>
             <button id="checkout" onclick="checkout()">Checkout</button>
-        </section>
-
-        <section id="map">
-            <h2>Find Us</h2>
-            <div id="google-map" style="width: 100%; height: 400px;"></div>
         </section>
     </main>
 

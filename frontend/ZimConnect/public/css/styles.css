@@ -1,162 +1,143 @@
 /* General Styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9; /* Light background for a soft feel */
-    color: #333; /* Dark text for contrast */
+    background-color: #ffffff;
+    color: #333333;
     line-height: 1.6;
 }
 
-/* Header */
+/* Header Styles */
 header {
-    background: linear-gradient(90deg, #006b3f, #ffc20e, #d01c1f); /* Zimbabwe flag colors */
-    color: #fff;
-    padding: 20px 10%;
+    background: linear-gradient(90deg, #008000, #ffd700, #ff0000);
+    color: #ffffff;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-header h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-header nav a {
-    color: #fff;
+header a {
+    color: #ffffff;
     text-decoration: none;
     margin: 0 15px;
-    font-weight: 500;
+    font-weight: bold;
     transition: color 0.3s;
 }
-
-header nav a:hover {
-    color: #f9f9f9; /* Slight color change on hover */
+header a:hover {
+    color: #000000;
 }
 
-/* Hero Section */
-.hero {
-    text-align: center;
-    padding: 50px 10%;
-    background: linear-gradient(90deg, #006b3f, #ffc20e);
-    color: #fff;
-}
-
-.hero h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-}
-
-.hero a {
-    background-color: #d01c1f;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 1rem;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.hero a:hover {
-    background-color: #b0171a;
-    transform: scale(1.05);
+/* Main Content */
+main {
+    padding: 40px;
 }
 
 /* Products Section */
 .products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    padding: 50px 10%;
-    background-color: #f9f9f9;
+    justify-content: center;
+    padding: 20px;
 }
-
 .product-item {
-    background: #fff;
-    border: 1px solid #e0e0e0;
+    border: 2px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    width: 300px;
     padding: 20px;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .product-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
-
 .product-item img {
     width: 100%;
-    max-width: 150px;
-    margin-bottom: 15px;
-    border-radius: 50%;
-    border: 3px solid #006b3f;
+    height: auto;
+    border-radius: 10px;
 }
-
 .product-item h3 {
-    font-size: 1.5rem;
-    color: #006b3f;
-    margin-bottom: 10px;
+    color: #008000;
+    margin: 15px 0;
 }
-
 .product-item p {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 20px;
+    color: #555555;
+    margin: 10px 0;
 }
-
 .product-item button {
-    background-color: #006b3f;
-    color: #fff;
+    background-color: #ff0000;
+    color: #ffffff;
     border: none;
     padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 1rem;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
-
 .product-item button:hover {
-    background-color: #004d2a;
+    background-color: #cc0000;
 }
 
-/* Footer */
+/* Footer Styles */
 footer {
-    background-color: #333;
-    color: #fff;
+    background: linear-gradient(90deg, #ff0000, #ffd700, #008000);
+    color: #ffffff;
     text-align: center;
-    padding: 20px 10%;
-    font-size: 0.9rem;
-    margin-top: 50px;
+    padding: 20px;
+    margin-top: 40px;
 }
 
-footer p {
-    margin: 0;
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+body.dark-mode header, 
+body.dark-mode footer {
+    background-color: #1e1e1e;
+    color: #ffffff;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .hero {
-        padding: 30px 5%;
-    }
-
-    .products {
-        padding: 30px 5%;
-    }
+/* Currency Switcher and Controls */
+.controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
 }
+.currency-switcher select {
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 16px;
+}
+
+/* Cart Preview */
+#cart-preview {
+    margin-top: 20px;
+    background: #f9f9f9;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+#cart-preview h3 {
+    margin: 0 0 20px 0;
+    color: #008000;
+}
+#cart-preview-list {
+    list-style: none;
+    padding: 0;
+}
+#cart-preview-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
