@@ -1,4 +1,4 @@
-document.getElementById('track-product').addEventListener('click', () => {
+document.getElementById('track-product').addEventListener('click', async () => {
     const productName = document.getElementById('product-name').value.trim();
 
     if (!productName) {
@@ -6,13 +6,16 @@ document.getElementById('track-product').addEventListener('click', () => {
         return;
     }
 
-    // Mock product data (replace with API integration if needed)
-    const products = {
-        'Product 1': 'In Stock',
-        'Product 2': 'Out of Stock',
-        'Product 3': 'Low Stock'
-    };
+    try {
+        const response = await fetch(`http://localhost:3000/api/products/track?name=${productName}`);
+        const data = await response.json();
 
-    const result = products[productName] || 'Product not found.';
-    document.getElementById('tracker-results').textContent = `${productName}: ${result}`;
+        if (data.success) {
+            document.getElementById('tracker-results').textContent = `${productName}: ${data.status}`;
+        } else {
+            document.getElementById('tracker-results').textContent = data.message;
+        }
+    } catch (error) {
+        console.error('Error fetching product data:', error);
+    }
 });
