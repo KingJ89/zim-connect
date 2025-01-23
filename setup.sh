@@ -4,10 +4,10 @@
 mkdir -p ZimConnect && cd ZimConnect
 
 # Create necessary folders
-mkdir -p public/css public/js public/images
+mkdir -p css js images
 
 # Create the main HTML file
-cat << 'EOF' > public/index.html
+cat << 'EOF' > index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,7 +82,7 @@ cat << 'EOF' > public/index.html
 EOF
 
 # Create a basic CSS file
-cat << 'EOF' > public/css/styles.css
+cat << 'EOF' > css/style.css
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -114,7 +114,7 @@ header a {
 EOF
 
 # Create a basic JavaScript file
-cat << 'EOF' > public/js/scripts.js
+cat << 'EOF' > js/scripts.js
 let cart = [];
 
 function addToCart(product, price) {
@@ -153,7 +153,7 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-app.use(express.static('public'));
+app.use(express.static('frontend'));
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
