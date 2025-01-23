@@ -1,0 +1,16 @@
+const fs = require('fs');
+const path = require('path');
+
+const html = fs.readFileSync(path.resolve(__dirname, '../../public/product-tracker.html'), 'utf8');
+
+describe('Product Tracker Page', () => {
+    beforeEach(() => {
+        document.documentElement.innerHTML = html.toString();
+    });
+
+    it('should have a title', () => {
+        const title = document.querySelector('h1').textContent;
+        expect(title).toBe('Track Product Availability');
+    });
+});
+
