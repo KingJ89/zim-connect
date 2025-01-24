@@ -24,8 +24,24 @@
         </nav>
     </header>
     <main>
-        <h1>Login</h1>
-        <p>Enter your credentials to access your account.</p>
+          <h1>Register</h1>
+        <form id="registration-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <div>
+            <p>Or sign up using Google:</p>
+            <a href="/auth/google" class="google-button">Sign up with Google</a>
+        </div>
+        <p>Already have an account? <a href="login.html">Log in here</a></p>
     </main>
     <footer>
         <p>&copy; 2025 ZimConnect. All rights reserved.</p>

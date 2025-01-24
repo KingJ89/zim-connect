@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Your Dashboard</h1>
+        <button id="logout-btn">Logout</button>
+    </header>
+    <main>
+        <p>Here are your activities and account details:</p>
+        <!-- Dashboard content -->
+    </main>
+
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = 'login.html';
+                });
+        });
+    </script>
+</body>
+</html>
