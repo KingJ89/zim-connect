@@ -26,6 +26,35 @@
     <main>
         <h1>Shop</h1>
         <p>Browse our products and add them to your cart.</p>
+	<section id="shop">
+    <h1>Welcome to ZimConnect Store</h1>
+    <div id="store-products">
+        <!-- Products loaded dynamically -->
+    </div>
+</section>
+
+<script>
+    async function loadProducts() {
+        const res = await fetch('http://localhost:5000/products');
+        const products = await res.json();
+        const store = document.getElementById('store-products');
+        store.innerHTML = '';
+        products.forEach((product) => {
+            const div = document.createElement('div');
+            div.className = 'product-item';
+            div.innerHTML = `
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+                <p>Price: $${product.price}</p>
+                <button onclick="addToCart('${product._id}')">Add to Cart</button>
+            `;
+            store.appendChild(div);
+        });
+    }
+
+    loadProducts();
+</script>
+
     </main>
     <footer>
         <p>&copy; 2025 ZimConnect. All rights reserved.</p>
