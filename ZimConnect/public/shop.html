@@ -53,6 +53,33 @@
     }
 
     loadProducts();
+import { useState } from 'react';
+import axios from 'axios';
+
+const ProductSearch = () => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+
+  const handleSearch = async () => {
+    const res = await axios.get(`/api/products/search?query=${query}`);
+    setResults(res.data);
+  };
+
+  return (
+    <div>
+      <input type="text" placeholder="Search Products" value={query} onChange={(e) => setQuery(e.target.value)} />
+      <button onClick={handleSearch}>Search</button>
+      <ul>
+        {results.map((product) => (
+          <li key={product.id}>{product.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default ProductSearch;
+
 </script>
 
     </main>
